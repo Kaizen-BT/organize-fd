@@ -1,2 +1,3 @@
 class Organizer:
-    pass
+    def say_hi(self) -> str:
+        return "Hello"
