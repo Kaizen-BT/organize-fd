@@ -1,3 +1,6 @@
+from collections.abc import Generator
+from pathlib import Path
+
 Organizer_Settings = dict[str, list[str]]
 
 
@@ -13,8 +16,22 @@ class Organizer:
             file extensions
         """
         self.settings = settings
+        self._target_extensions = set(
+            ext for extensions in settings.values() for ext in extensions
+        )
+        self._cwd = Path.cwd()
 
-    def print_settings(self) -> None:
-        """Helper method to display what files will be moved to which directory."""
-        for destination, extension_list in self.settings.items():
-            print(f"{destination} will hold:\n{extension_list}")
+    def affected_paths(self) -> Generator[Path, None, None]:
+        """Returns the affected files as Path objects.
+
+        Note: The result is evaluated at invocation
+
+        Returns:
+            Generator[Path, None, None]: Generator of all files that will be affected by
+            the organizer
+        """
+        return (
+            file_item
+            for file_item in self._cwd.iterdir()
+            if file_item.suffix in self._target_extensions
+        )
