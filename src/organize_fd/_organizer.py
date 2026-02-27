@@ -55,3 +55,24 @@ class Organizer:
             if source_path.is_file() and source_path.suffix in extensions:
                 return directory
         return None
+
+    def dry_run(self) -> None:
+        """Displays affected files and where they will be moved.
+
+        This method does not touch the file system it is for
+        a quick run to check what and where files will be moved
+
+        Raises:
+            RuntimeError: get_target_directory SHOULD return
+            a valid directory string, if it does not then something
+            spooky is going on
+        """
+        for source_path in self.affected_paths():
+            destination = self.get_target_directory(source_path)
+
+            if not destination:
+                raise RuntimeError("Something is super not right")
+
+            destination_path = self._cwd / destination
+
+            print(f"{source_path.name} will be moved to {destination_path}")
