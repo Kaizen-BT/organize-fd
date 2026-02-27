@@ -35,3 +35,21 @@ class Organizer:
             for file_item in self._cwd.iterdir()
             if file_item.suffix in self._target_extensions
         )
+
+    def get_target_directory(self, source_path: Path) -> str | None:
+        """Find the directory in which the supplied file will be moved.
+
+        This function is unpredictable if the file-extension of the file
+        is repeated in multiple directories.
+
+        Args:
+            source_path (Path): Path object representation of any file/folder
+
+        Returns:
+            str | None: The name of the directory the file will be moved
+            to or None if no directory handles the file's file-extensions
+        """
+        for directory, extensions in self.settings.items():
+            if source_path.is_file() and source_path.suffix in extensions:
+                return directory
+        return None
