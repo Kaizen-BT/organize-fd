@@ -41,6 +41,8 @@ class Organizer:
 
         This function is unpredictable if the file-extension of the file
         is repeated in multiple directories.
+        This function does not do any existence checks. It simply resolves
+        the expected directory based on the Path objects suffix attribute
 
         Args:
             source_path (Path): Path object representation of any file/folder
